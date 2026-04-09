@@ -1,0 +1,337 @@
+// ==========================================
+// MyDash Design System - Dark Mode
+// Theme Overrides
+// ==========================================
+@use "variables" as *;
+
+html.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  
+  --border-default: #334155;
+  --border-hover: #475569;
+  
+  --primary-light: #1e3a5f;
+
+  // Dark Glassmorphism 
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-bg-hover: rgba(15, 23, 42, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  color-scheme: dark;
+}
+
+.dark {
+  body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+  
+  .app-sidebar,
+  .app-navbar,
+  .card,
+  .card-kpi,
+  .table-wrapper {
+    background-color: var(--bg-primary);
+    border-color: var(--border-default);
+  }
+  
+  // Sidebar dark mode
+  .sidebar-logo-text,
+  .sidebar-nav-item,
+  .sidebar-nav-item span {
+    color: #ffffff;
+  }
+  
+  .sidebar-nav-section__title {
+    color: #64748b;
+  }
+  
+  .sidebar-user__name {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  
+  .sidebar-user__role {
+    color: #94a3b8;
+  }
+  
+  .sidebar-user__action {
+    color: #94a3b8;
+    
+    &:hover {
+      color: #ffffff;
+    }
+  }
+  
+  .sidebar-nav-arrow {
+    color: #94a3b8;
+  }
+  
+  .sidebar-nav-item:hover {
+    background-color: var(--bg-tertiary);
+    color: #ffffff;
+    
+    svg {
+      color: #ffffff;
+    }
+  }
+  
+  .sidebar-nav-item.active {
+    background-color: var(--primary-light);
+    color: $primary;
+    
+    svg {
+      color: $primary;
+    }
+  }
+  
+  .sidebar-submenu .sidebar-nav-item {
+    color: #e2e8f0;
+    
+    &::before {
+      background-color: #475569;
+    }
+    
+    &:hover {
+      color: #ffffff;
+      background-color: transparent;
+      
+      &::before {
+        background-color: $primary;
+      }
+    }
+    
+    &.active {
+      color: $primary;
+      background-color: transparent;
+      
+      &::before {
+        background-color: $primary;
+      }
+    }
+  }
+  
+  // Dropdown dark mode
+  .dropdown-menu {
+    background-color: var(--bg-primary);
+    border-color: var(--border-default);
+  }
+  
+  .dropdown-item {
+    color: #e2e8f0;
+    
+    &:hover {
+      background-color: var(--bg-tertiary);
+      color: #ffffff;
+    }
+  }
+  
+  .dropdown-header {
+    color: #e2e8f0;
+  }
+  
+  .dropdown-divider {
+    background-color: var(--border-default);
+  }
+  
+  .dropdown-footer {
+    border-top-color: var(--border-default);
+    
+    a {
+      color: $primary;
+    }
+  }
+  
+  // Notification dropdown
+  .notification-dropdown {
+    .notification-title {
+      color: #e2e8f0;
+    }
+    
+    .notification-item {
+      border-bottom-color: var(--border-default);
+      
+      &:hover {
+        background-color: var(--bg-tertiary);
+      }
+    }
+  }
+  
+  // Table dark mode
+  .table {
+    thead {
+      background-color: var(--bg-tertiary);
+    }
+    
+    th {
+      color: #94a3b8;
+    }
+    
+    tbody tr:hover {
+      background-color: var(--bg-tertiary);
+    }
+    
+    th, td {
+      color: #e2e8f0;
+    }
+  }
+  
+  .table-header {
+    border-bottom-color: var(--border-default);
+    
+    h3 {
+      color: #e2e8f0;
+    }
+  }
+  
+  // Form dark mode
+  .form-input,
+  .form-select,
+  .form-textarea {
+    background-color: var(--bg-primary);
+    border-color: var(--border-default);
+    color: #ffffff;
+    
+    &::placeholder {
+      color: #64748b;
+    }
+    
+    &:hover {
+      border-color: var(--border-hover);
+    }
+  }
+  
+  .form-label {
+    color: #e2e8f0;
+  }
+  
+  // Page header
+  .page-header h1,
+  .card-title,
+  .text-primary {
+    color: #ffffff;
+  }
+  
+  .page-header-desc,
+  .text-secondary {
+    color: #94a3b8;
+  }
+  
+  .text-muted {
+    color: #64748b;
+  }
+  
+  .breadcrumb {
+    span {
+      color: #64748b;
+    }
+  }
+  
+  // Badges
+  .badge-neutral {
+    background-color: var(--bg-tertiary);
+    color: #94a3b8;
+  }
+  
+  // Navbar search
+  .navbar-search {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-default);
+  }
+  
+  .navbar-search-input {
+    color: #ffffff;
+    
+    &::placeholder {
+      color: #64748b;
+    }
+  }
+  
+  .navbar-search-kbd {
+    background-color: var(--bg-primary);
+    border-color: var(--border-default);
+    color: #64748b;
+  }
+  
+  .navbar-username {
+    color: #ffffff;
+  }
+  
+  // Modal
+  .modal {
+    background-color: var(--bg-primary);
+  }
+  
+  .modal-header {
+    border-bottom-color: var(--border-default);
+    
+    h3 {
+      color: #ffffff;
+    }
+  }
+  
+  .modal-footer {
+    border-top-color: var(--border-default);
+  }
+  
+  // Tabs
+  .tabs {
+    border-bottom-color: var(--border-default);
+  }
+  
+  .tab {
+    color: #64748b;
+    
+    &:hover {
+      color: #e2e8f0;
+    }
+    
+    &.active {
+      color: $primary;
+      border-bottom-color: $primary;
+    }
+  }
+  
+  // Alert dark mode
+  .alert--dark {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-default);
+  }
+  
+  // Progress
+  .progress {
+    background-color: var(--bg-tertiary);
+  }
+  
+  // Skeleton
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg-tertiary) 25%, #475569 50%, var(--bg-tertiary) 75%);
+  }
+  
+  // Theme toggle
+  .theme-toggle {
+    color: #e2e8f0;
+    
+    &:hover {
+      background-color: var(--bg-tertiary);
+      color: #ffffff;
+    }
+  }
+  
+  // Trends
+  .card-kpi__trend--down,
+  .text-danger {
+    color: #f87171;
+  }
+  
+  .card-kpi__trend--up,
+  .text-success {
+    color: #4ade80;
+  }
+}

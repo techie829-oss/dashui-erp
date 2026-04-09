@@ -1,0 +1,211 @@
+// ==========================================
+// MyDash Design System - Mixins
+// Reusable Patterns
+// ==========================================
+@use "variables" as *;
+
+// ----------------------------------------
+// Responsive Mixins
+// ----------------------------------------
+@mixin sm { 
+  @media (min-width: $breakpoint-sm) { 
+    @content; 
+  } 
+}
+
+@mixin md { 
+  @media (min-width: $breakpoint-md) { 
+    @content; 
+  } 
+}
+
+@mixin lg { 
+  @media (min-width: $breakpoint-lg) { 
+    @content; 
+  } 
+}
+
+@mixin xl { 
+  @media (min-width: $breakpoint-xl) { 
+    @content; 
+  } 
+}
+
+// ----------------------------------------
+// Flexbox Helpers
+// ----------------------------------------
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+// ----------------------------------------
+// Input Base Styles
+// ----------------------------------------
+@mixin input-base {
+  width: 100%;
+  padding: $space-2 $space-3;
+  font-family: $font-sans;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  background-color: $bg-primary;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &::placeholder {
+    color: $text-muted;
+  }
+  
+  &:hover {
+    border-color: $border-hover;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $border-focus;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+  }
+  
+  &:disabled {
+    background-color: $bg-secondary;
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+}
+
+// ----------------------------------------
+// Button Base Styles
+// ----------------------------------------
+@mixin btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  font-family: $font-sans;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  line-height: 1;
+  text-decoration: none;
+  border-radius: $radius-md;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all $transition-fast;
+  white-space: nowrap;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ----------------------------------------
+// Card Styles
+// ----------------------------------------
+@mixin card-base {
+  background-color: $bg-primary;
+  border: 1px solid $border-default;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+// ----------------------------------------
+// Focus Ring
+// ----------------------------------------
+@mixin focus-ring {
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px $bg-primary, 0 0 0 4px $primary;
+  }
+}
+
+// ----------------------------------------
+// Truncate Text
+// ----------------------------------------
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ----------------------------------------
+// Scrollbar Styling
+// ----------------------------------------
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: $neutral-300;
+    border-radius: $radius-full;
+    
+    &:hover {
+      background-color: $neutral-400;
+    }
+  }
+}
+
+// ----------------------------------------
+// Aspect Ratio
+// ----------------------------------------
+@mixin aspect-ratio($width, $height) {
+  aspect-ratio: $width / $height;
+}
+
+// ----------------------------------------
+// Absolute Position
+// ----------------------------------------
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// ----------------------------------------
+// Visually Hidden (Accessibility)
+// ----------------------------------------
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
