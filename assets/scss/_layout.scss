@@ -13,12 +13,12 @@
   margin-right: auto;
   padding-left: $space-4;
   padding-right: $space-4;
-  
+
   @include md {
     padding-left: $space-6;
     padding-right: $space-6;
   }
-  
+
   @include lg {
     padding-left: $space-8;
     padding-right: $space-8;
@@ -39,48 +39,89 @@
   height: 100vh;
   background-color: $bg-primary;
   border-right: 1px solid $border-default;
-  z-index: $z-sticky;
-  transition: width $transition-base;
+  z-index: $z-fixed;
+  transition: transform $transition-base, width $transition-base;
   display: flex;
   flex-direction: column;
-  
-  &.collapsed {
-    width: $sidebar-width-mini;
-    
-    .sidebar-header {
-      padding: $space-4 $space-2;
-    }
 
-    .sidebar-logo {
-      justify-content: center;
-      gap: 0;
-    }
+  // Mobile defaults
+  @media (max-width: ($breakpoint-md - 1px)) {
+    transform: translateX(-100%);
+    box-shadow: $shadow-xl;
 
-    .sidebar-logo-text,
-    .sidebar-nav-item span,
-    .sidebar-arrow {
-      display: none;
+    &.mobile-active {
+      transform: translateX(0);
     }
-    
-    .sidebar-nav-item {
-      justify-content: center;
-      padding: $space-3;
-      
-      svg {
-        margin: 0;
+  }
+
+  // Desktop collapsed (mini-rail)
+  @include md {
+    &.collapsed {
+      width: $sidebar-width-mini;
+
+      .sidebar-header {
+        padding: $space-4 $space-2;
+        justify-content: center;
+      }
+
+      .sidebar-logo {
+        justify-content: center;
+        gap: 0;
+      }
+
+      .sidebar-logo-text,
+      .sidebar-nav-item>span,
+      .sidebar-arrow,
+      .sidebar-theme-toggle__label,
+      .sidebar-theme-toggle__pill {
+        display: none !important;
+      }
+
+      .sidebar-nav-item {
+        justify-content: center;
+        padding: $space-3;
+
+        svg {
+          margin: 0;
+          flex-shrink: 0;
+        }
       }
     }
   }
 }
 
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: $z-modal-backdrop;
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-base;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .app-main {
   flex: 1;
-  margin-left: $sidebar-width;
+  margin-left: 0;
   min-width: 0;
   transition: margin-left $transition-base;
-  
-  .sidebar-collapsed & {
-    margin-left: $sidebar-width-mini;
+
+  @include md {
+    margin-left: $sidebar-width;
+  }
+}
+
+// Applied to <body> when desktop sidebar is collapsed
+body.sidebar-collapsed {
+  @include md {
+    .app-main {
+      margin-left: $sidebar-width-mini;
+    }
   }
 }
 
@@ -91,11 +132,99 @@
   background-color: $bg-primary;
   border-bottom: 1px solid $border-default;
   z-index: $z-sticky;
+  display: flex;
+  align-items: center;
+  // No left padding — toggle button sits flush at sidebar boundary
+  padding: 0;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0;
+  padding-right: $space-4;
+
+  @include md {
+    padding-right: $space-6;
+  }
+}
+
+.navbar-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $space-4;
+  flex-shrink: 0;
+  height: $navbar-height;
+  position: relative;
+
+  // Subtle centred divider on the right
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 40%;
+    width: 1px;
+    background-color: $border-default;
+  }
+}
+
+.navbar-search-wrapper {
+  flex: 1;
+  max-width: 600px;
+  margin-left: $space-4;
+
+  @include md {
+    margin-left: $space-6;
+  }
+
+  @media (max-width: ($breakpoint-md - 1px)) {
+    display: none;
+
+    &.mobile-visible {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: $bg-primary;
+      z-index: 10;
+      padding: $space-2;
+      margin-left: 0;
+    }
+  }
+}
+
+.navbar-search-kbd {
+  @media (max-width: ($breakpoint-sm - 1px)) {
+    display: none;
+  }
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+
+  @include sm {
+    gap: $space-4;
+  }
+}
+
+.navbar-username {
+  @media (max-width: ($breakpoint-sm - 1px)) {
+    display: none;
+  }
 }
 
 .app-content {
   padding: $space-6;
-  
+
   @include lg {
     padding: $space-8;
   }
@@ -107,51 +236,143 @@
   gap: $grid-gutter;
 }
 
-.cols-1  { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-.cols-2  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.cols-3  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.cols-4  { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.cols-6  { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+.cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
 
-@include sm { 
-  .sm\:cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  .sm\:cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
+.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-@include md { 
-  .md\:cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
-  .md\:cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-@include lg { 
-  .lg\:cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } 
-  .lg\:cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
-@include xl { 
-  .xl\:cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
+
+.cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+@include sm {
+  .sm\:cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .sm\:cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include md {
+  .md\:cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@include lg {
+  .lg\:cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@include xl {
+  .xl\:cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 // Col Spans
-.col-span-2    { grid-column: span 2 / span 2; }
-.col-span-3    { grid-column: span 3 / span 3; }
-.col-span-4    { grid-column: span 4 / span 4; }
-.col-span-6    { grid-column: span 6 / span 6; }
-.col-span-full { grid-column: 1 / -1; }
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
+
+.col-span-4 {
+  grid-column: span 4 / span 4;
+}
+
+.col-span-6 {
+  grid-column: span 6 / span 6;
+}
+
+.col-span-full {
+  grid-column: 1 / -1;
+}
 
 // Flex Utilities
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.flex-wrap { flex-wrap: wrap; }
-.items-center { align-items: center; }
-.items-start { align-items: flex-start; }
-.items-end { align-items: flex-end; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.justify-end { justify-content: flex-end; }
-.gap-1 { gap: $space-1; }
-.gap-2 { gap: $space-2; }
-.gap-3 { gap: $space-3; }
-.gap-4 { gap: $space-4; }
-.gap-6 { gap: $space-6; }
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-1 {
+  gap: $space-1;
+}
+
+.gap-2 {
+  gap: $space-2;
+}
+
+.gap-3 {
+  gap: $space-3;
+}
+
+.gap-4 {
+  gap: $space-4;
+}
+
+.gap-6 {
+  gap: $space-6;
+}
 
 // Section
 .section {
@@ -164,7 +385,7 @@
   flex-wrap: wrap;
   gap: $space-4;
   margin-bottom: $space-6;
-  
+
   h1 {
     margin-top: $space-1;
   }
@@ -190,16 +411,16 @@
   gap: $space-2;
   font-size: $font-size-sm;
   color: $text-muted;
-  
+
   a {
     color: $text-muted;
-    
+
     &:hover {
       color: $primary;
       text-decoration: none;
     }
   }
-  
+
   span {
     color: $text-secondary;
   }

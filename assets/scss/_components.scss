@@ -513,16 +513,72 @@
   padding: $space-4;
   background-color: $bg-primary;
   border: 1px solid $border-default;
+  border-radius: $radius-lg;
+  transition: transform $transition-base, box-shadow $transition-base, border-color $transition-base;
+  position: relative;
+  overflow: hidden;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+    border-color: rgba($primary, 0.2);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: $grad-primary;
+    }
+  }
   
   &__header {
     @include flex-between;
-    margin-bottom: $space-2;
+    margin-bottom: $space-3;
   }
   
   &__label {
     font-size: $font-size-sm;
     color: $text-muted;
     font-weight: $font-weight-medium;
+    font-family: $font-sans;
+  }
+  
+  &__value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    font-family: $font-mono; // Use mono for data
+    margin-bottom: $space-2;
+    line-height: 1.2;
+  }
+  
+  &__trend {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    margin-top: $space-2;
+    
+    &--up {
+      background-color: $success-light;
+      color: $success;
+    }
+    
+    &--down {
+      background-color: $danger-light;
+      color: $danger;
+    }
+    
+    &--neutral {
+      background-color: $neutral-100;
+      color: $text-muted;
+    }
   }
   
   &__icon {
@@ -536,25 +592,20 @@
       height: 16px;
     }
   }
-  
-  &__value {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $text-primary;
-    line-height: 1.2;
+}
+
+// KPI 4-column responsive grid
+.grid-kpi {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $grid-gutter;
+
+  @media (max-width: ($breakpoint-lg - 1px)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  
-  &__trend {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-1;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-medium;
-    margin-top: $space-2;
-    
-    &--up { color: $success; }
-    &--down { color: $danger; }
-    &--neutral { color: $text-muted; }
+
+  @media (max-width: ($breakpoint-sm - 1px)) {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 }
 
@@ -851,9 +902,6 @@
   @include md { padding: 0 $space-6; }
 }
 
-.navbar-toggle {
-  display: block;
-}
 
 .navbar-search {
   display: none;
@@ -949,35 +997,83 @@
 }
 
 // ----------------------------------------
-// THEME TOGGLE
+// SIDEBAR THEME TOGGLE (Inline Nav Item)
 // ----------------------------------------
-.theme-toggle {
-  @include btn-base;
-  padding: $space-2;
-  background: transparent;
-  border: none;
-  color: $text-secondary;
-  border-radius: $radius-md;
-  width: 36px;
-  height: 36px;
-  
-  &:hover {
-    background-color: $bg-secondary;
+.sidebar-theme-toggle {
+  // Inherits .sidebar-nav-item styles
+  width: 100%;
+  text-align: left;
+
+  // In light mode: show sun icon, hide moon
+  .icon-sun  { display: block; }
+  .icon-moon { display: none; }
+
+  &__label {
+    flex: 1;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $text-secondary;
+    transition: color $transition-fast;
+  }
+
+  &:hover &__label {
     color: $text-primary;
   }
-  
-  svg { width: 18px; height: 18px; }
-  
-  .icon-moon { display: none; }
-  .icon-sun { display: block; }
-}
 
-html.dark {
-  .theme-toggle {
-    .icon-moon { display: block; }
-    .icon-sun { display: none; }
+  // Pill toggle switch
+  &__pill {
+    flex-shrink: 0;
+    width: 34px;
+    height: 18px;
+    background-color: $neutral-300;
+    border-radius: $radius-full;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    transition: background-color $transition-base;
+    margin-left: auto;
+  }
+
+  &__pill-thumb {
+    width: 14px;
+    height: 14px;
+    background-color: white;
+    border-radius: $radius-full;
+    box-shadow: $shadow-xs;
+    transform: translateX(0);
+    transition: transform $transition-base;
   }
 }
+
+// ─── Dark Mode overrides ─────────────────
+html.dark {
+  .sidebar-theme-toggle {
+    // In dark mode: show moon icon, hide sun
+    .icon-sun  { display: none; }
+    .icon-moon { display: block; }
+
+    .sidebar-theme-toggle__label {
+      color: #e2e8f0;
+    }
+
+    .sidebar-theme-toggle__pill {
+      background-color: $primary; // Deep slate "active" primary
+    }
+
+    .sidebar-theme-toggle__pill-thumb {
+      transform: translateX(16px);
+    }
+  }
+}
+
+// Collapsed sidebar: hide label + pill
+.app-sidebar.collapsed .sidebar-theme-toggle {
+  .sidebar-theme-toggle__label,
+  .sidebar-theme-toggle__pill {
+    display: none;
+  }
+}
+
 
 // ----------------------------------------
 // TABLE - Enhanced
@@ -1299,15 +1395,18 @@ html.dark {
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   cursor: pointer;
-  transition: all $transition-fast;
+  transition: all $transition-base;
+  border-radius: $radius-md $radius-md 0 0;
   
   &:hover {
     color: $text-primary;
+    background-color: $bg-secondary;
   }
   
   &.active {
     color: $primary;
     border-bottom-color: $primary;
+    background-color: rgba($primary, 0.03);
   }
   
   &-sm {
@@ -1323,6 +1422,7 @@ html.dark {
   &-disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background-color: transparent !important;
   }
 }
 
@@ -1365,23 +1465,28 @@ html.dark {
 // ----------------------------------------
 .progress {
   width: 100%;
-  height: 8px;
-  background-color: $neutral-100;
-  border-radius: $radius-full;
-  overflow: hidden;
+  // Wrapper — no height/overflow here, so label is not clipped
   
-  &-sm { height: 4px; }
-  &-lg { height: 12px; }
+  &__track {
+    width: 100%;
+    height: 8px;
+    background-color: $neutral-200;
+    border-radius: $radius-full;
+    overflow: hidden;
+  }
+
+  &-sm .progress__track { height: 4px; }
+  &-lg .progress__track { height: 12px; }
   
   &__bar {
     height: 100%;
-    background-color: $primary;
+    background-color: #3b82f6; // Visible blue, not near-black $primary
     border-radius: $radius-full;
     transition: width $transition-slow;
     
     &--success { background-color: $success; }
     &--warning { background-color: $warning; }
-    &--danger { background-color: $danger; }
+    &--danger  { background-color: $danger; }
   }
   
   &-label {
@@ -1389,7 +1494,8 @@ html.dark {
     justify-content: space-between;
     margin-bottom: $space-1;
     font-size: $font-size-xs;
-    color: $text-muted;
+    font-weight: $font-weight-medium;
+    color: $text-secondary;
   }
 }
 
@@ -1489,7 +1595,15 @@ html.dark {
   padding: $space-4;
   border-radius: $radius-lg;
   font-size: $font-size-sm;
-  
+
+  &-primary {
+    background-color: $info-light;
+    border-left: 4px solid $info;
+    color: #0369a1;
+
+    .alert-icon svg { color: $info; }
+    strong { color: #0c4a6e; }
+  }
   &-icon {
     flex-shrink: 0;
     width: 20px;

@@ -40,6 +40,37 @@ html.dark {
     background-color: var(--bg-primary);
     border-color: var(--border-default);
   }
+
+  // Card & KPI text overrides
+  .card,
+  .card-kpi {
+    .card-kpi__label,
+    .card-kpi__value,
+    .card-title,
+    .card-description,
+    .card-header h3,
+    .card-header h4,
+    p,
+    span:not(.badge):not(.sidebar-theme-toggle__pill):not(.sidebar-theme-toggle__pill-thumb) {
+      color: #e2e8f0;
+    }
+
+    .card-kpi__value {
+      color: #ffffff;
+    }
+
+    .card-kpi__label {
+      color: #94a3b8;
+    }
+
+    .card-header {
+      border-bottom-color: var(--border-default);
+    }
+
+    .card-footer {
+      border-top-color: var(--border-default);
+    }
+  }
   
   // Sidebar dark mode
   .sidebar-logo-text,
@@ -84,10 +115,13 @@ html.dark {
   
   .sidebar-nav-item.active {
     background-color: var(--primary-light);
-    color: $primary;
+    color: #6366f1;
     
-    svg {
-      color: $primary;
+    svg,
+    i,
+    [data-lucide] {
+      color: #6366f1;
+      stroke: #6366f1;
     }
   }
   
@@ -280,25 +314,44 @@ html.dark {
     border-top-color: var(--border-default);
   }
   
+  // Navbar toggle divider in dark mode
+  .navbar-toggle-wrapper {
+    &::after {
+      background-color: var(--border-default);
+    }
+  }
+
   // Tabs
   .tabs {
     border-bottom-color: var(--border-default);
   }
   
-  .tab {
+  .tab-item {
     color: #64748b;
     
     &:hover {
       color: #e2e8f0;
+      background-color: var(--bg-tertiary);
     }
     
     &.active {
-      color: $primary;
-      border-bottom-color: $primary;
+      color: #6366f1;
+      border-bottom-color: #6366f1;
+      background-color: rgba(99, 102, 241, 0.1);
     }
   }
-  
+
   // Alert dark mode
+  .alert-primary {
+    background-color: #1e293b;
+    border-left: 4px solid #3b82f6;
+    color: #93c5fd;
+    
+    strong { color: #bfdbfe; }
+    .alert-icon svg { color: #3b82f6; }
+    .alert-close svg { color: #93c5fd; }
+  }
+
   .alert--dark {
     background-color: var(--bg-tertiary);
     border-color: var(--border-default);
@@ -325,13 +378,123 @@ html.dark {
   }
   
   // Trends
-  .card-kpi__trend--down,
-  .text-danger {
+  .card-kpi__trend--down {
+    background-color: rgba(#f87171, 0.15);
     color: #f87171;
   }
-  
-  .card-kpi__trend--up,
-  .text-success {
+
+  .card-kpi__trend--up {
+    background-color: rgba(#4ade80, 0.15);
     color: #4ade80;
+  }
+
+  .text-danger { color: #f87171; }
+  .text-success { color: #4ade80; }
+
+
+  // ----------------------------------------
+  // Button Overrides for Dark Mode
+  // ----------------------------------------
+
+  // Primary button — indigo so it's visible on dark bg
+  .btn-primary {
+    background-color: #6366f1;
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background-color: #4f46e5;
+    }
+    &:active:not(:disabled) {
+      background-color: #4338ca;
+    }
+  }
+
+  .btn-outline {
+    color: #e2e8f0;
+    border-color: var(--border-default);
+    background-color: transparent;
+
+    &:hover:not(:disabled) {
+      background-color: var(--bg-tertiary);
+      border-color: var(--border-hover);
+      color: #ffffff;
+    }
+
+    // Outline + Primary tint variant
+    &.btn-primary {
+      color: #818cf8;
+      border-color: rgba(#818cf8, 0.5);
+      background-color: transparent;
+
+      &:hover:not(:disabled) {
+        background-color: rgba(#6366f1, 0.15);
+        border-color: #818cf8;
+        color: #818cf8;
+      }
+    }
+  }
+
+  .btn-ghost {
+    color: #94a3b8;
+
+    &:hover:not(:disabled) {
+      background-color: var(--bg-tertiary);
+      color: #ffffff;
+    }
+  }
+
+  .btn-link {
+    color: #818cf8; // Visible indigo on dark backgrounds
+
+    &:hover:not(:disabled) {
+      color: #a5b4fc;
+      text-decoration: underline;
+    }
+  }
+
+  // Icon buttons
+  .btn-icon {
+    color: #94a3b8;
+
+    &:hover {
+      background-color: var(--bg-tertiary);
+      color: #ffffff;
+    }
+  }
+
+  // Progress dark mode
+  .progress__track {
+    background-color: var(--bg-tertiary);
+  }
+
+  .progress-label {
+    color: #94a3b8;
+  }
+
+  // Breadcrumb — better contrast
+  .breadcrumb {
+    a, span { color: #64748b; }
+    span:last-child { color: #94a3b8; }
+  }
+
+  // Pagination dark mode
+  .table-pagination {
+    &__info { color: #64748b; }
+
+    &__btn {
+      color: #94a3b8;
+      border-color: var(--border-default);
+
+      &:hover:not(:disabled) {
+        background-color: var(--bg-tertiary);
+        color: #ffffff;
+      }
+
+      &.active {
+        background-color: #6366f1;
+        border-color: #6366f1;
+        color: #ffffff;
+      }
+    }
   }
 }

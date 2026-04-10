@@ -45,37 +45,60 @@
   const sidebarToggle = document.getElementById('sidebarToggle');
   const sidebar = document.getElementById('sidebar');
   const main = document.getElementById('main');
+  const sidebarBackdrop = document.getElementById('sidebarBackdrop');
 
   function toggleSidebar() {
-    sidebar.classList.toggle('collapsed');
-    main.classList.toggle('sidebar-collapsed');
-    
-    const isCollapsed = sidebar.classList.contains('collapsed');
-    localStorage.setItem('sidebarCollapsed', isCollapsed);
-    
-    if (sidebarToggle) {
-      sidebarToggle.setAttribute('aria-expanded', !isCollapsed);
+    const isMobile = window.innerWidth < 768; // Matching $breakpoint-md
+
+    if (isMobile) {
+      const isActive = sidebar.classList.toggle('mobile-active');
+      if (sidebarBackdrop) {
+        sidebarBackdrop.classList.toggle('active', isActive);
+      }
+      document.body.style.overflow = isActive ? 'hidden' : '';
+    } else {
+      sidebar.classList.toggle('collapsed');
+      document.body.classList.toggle('sidebar-collapsed');
+      
+      const isCollapsed = sidebar.classList.contains('collapsed');
+      localStorage.setItem('sidebarCollapsed', isCollapsed);
+      
+      if (sidebarToggle) {
+        sidebarToggle.setAttribute('aria-expanded', String(!isCollapsed));
+      }
     }
+  }
+
+  function closeMobileSidebar() {
+    sidebar.classList.remove('mobile-active');
+    if (sidebarBackdrop) {
+      sidebarBackdrop.classList.remove('active');
+    }
+    document.body.style.overflow = '';
   }
 
   function initSidebar() {
     const savedState = localStorage.getItem('sidebarCollapsed');
-    
-    // Default to Expanded (false) if nothing is saved
-    if (savedState === 'true') {
+    const isMobile = window.innerWidth < 768;
+
+    if (!isMobile && savedState === 'true') {
       sidebar.classList.add('collapsed');
-      main.classList.add('sidebar-collapsed');
+      document.body.classList.add('sidebar-collapsed');
     }
     
     // Sync ARIA state on load
     if (sidebarToggle) {
       const isCurrentlyCollapsed = sidebar.classList.contains('collapsed');
-      sidebarToggle.setAttribute('aria-expanded', !isCurrentlyCollapsed);
+      sidebarToggle.setAttribute('aria-expanded', String(!isCurrentlyCollapsed));
     }
   }
 
   if (sidebarToggle) {
     sidebarToggle.addEventListener('click', toggleSidebar);
+  }
+
+  if (sidebarBackdrop) {
+    sidebarBackdrop.addEventListener('click', closeMobileSidebar);
   }
 
   initSidebar();
@@ -601,6 +624,15 @@
   // ----------------------------------------
   // Initialize
   // ----------------------------------------
-  console.log('MyDash UI Kit initialized');
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons({
+      attrs: {
+        'stroke-width': 2,
+        'class': 'lucide-icon'
+      }
+    });
+  }
+  
+  console.log('MyDash UI Kit v2 initialized (Pro Max Edition)');
 
 })();
